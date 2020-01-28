@@ -14,7 +14,7 @@ after_success:
   - docker build -t tp/multi-server ./server
   - docker build -t tp/multi-worker ./worker
   # Log in to docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" | --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
   - docker push tp/multi-client
   - docker push tp/multi-nginx
