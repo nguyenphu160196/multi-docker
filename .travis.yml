@@ -1,0 +1,23 @@
+sudpo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t tp/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true tp/react-test npm test
+
+after_success:
+  - docker build -t tp/multi-client ./client
+  - docker build -t tp/multi-nginx ./nginx
+  - docker build -t tp/multi-server ./server
+  - docker build -t tp/multi-worker ./worker
+  # Log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" | --password-stdin
+  # Take those images and push them to docker hub
+  - docker push tp/multi-client
+  - docker push tp/multi-nginx
+  - docker push tp/multi-server 
+  - docker push tp/multi-worker
+
